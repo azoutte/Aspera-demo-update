@@ -1,4 +1,4 @@
-###### pip install lxml
+####### pip install lxml
 # pip install requests
 # http://docs.python-guide.org/en/latest/scenarios/scrape/
 #from lxml import html
@@ -10,27 +10,36 @@
 #import urllib.request
 #page = urllib.request.urlopen('http://hiscore.runescape.com/index_lite.ws?player=zezima')
 #print(page.read())
-import urllib, re, time, os
+import urllib.request, re, time, os, string, sys
+from urllib.request import urlopen
 homeDir="/Users/andy"
 
-sock = urllib.urlopen('https://license.aspera.us/evals')
+sock = urllib.request.urlopen('https://license.aspera.us/evals')
 htmlSource = sock.read()
 sock.close()
-arrayOfLines = htmlSource.splitlines()
-n = arrayOfLines.index('<strong>Username</strong>') + 2
-passWord = re.sub('<[^<]+?>', '', arrayOfLines[n])
+arrayOfLines = htmlSource.split()
+print(len(htmlSource))
+for line in arrayOfLines:
+    print(line)
+n = arrayOfLines.index(b'<strong>Username</strong>') + 2
+passWord = arrayOfLines[n].decode("utf-8")
+passWord = re.sub('<[^<]+?>', '', passWord)
 print(passWord)
-n = arrayOfLines.index('<strong>Password</strong>') + 2
-userName = re.sub('<[^<]+?>', '', arrayOfLines[n])
+n = arrayOfLines.index(b'<strong>Password</strong>') + 2
+userName = arrayOfLines[n].decode("utf-8")
+userName = re.sub('<[^<]+?>', '', userName)
 print(userName)
 
 month = time.strftime("%m")
 year = time.strftime("%Y")
 if not os.path.exists(homeDir + '/licenses'):
     print("it doesn't exist")
-    os.mkdir(homeDir + '/licenses', 0700)
-testfile = urllib.URLopener()
-testfile.retrieve("https://license.aspera.us/evals/" + year + "/" + month + ".zip", homeDir + "/licenses/licenses.zip")
+    os.mkdir(homeDir + '/licenses', 0o700)
+urllib.request.urlretrieve("https://license.aspera.us/evals/" + year + "/" + month + ".zip", homeDir + "/licenses/licenses.zip")
+
+
+#testfile = urllib.URLopener()
+#testfile.retrieve("https://license.aspera.us/evals/" + year + "/" + month + ".zip", homeDir + "/licenses/licenses.zip")
 unzipCommand = 'unzip -o ' + homeDir + '/licenses/licenses.zip -d ' + homeDir + '/licenses'
 os.system(unzipCommand)
 
