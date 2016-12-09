@@ -2,12 +2,12 @@
 import urllib, re, time, os, string, glob
 homeDir = os.path.expanduser("~")
 licDir = homeDir + "/asperalicenses"
-downloads = homeDir + "/asperadownloads"
+dloadDir = homeDir + "/asperadownloads"
 
 # Make the downloads directory if it doesn't already exist
-if not os.path.exists(downloads):
+if not os.path.exists(dloadDir):
     print("Downloads doesn't exist.  Creating.")
-    os.mkdir(downloads, 0o700)
+    os.mkdir(dloadDir, 0o700)
 
 # Function to find and download the proper package.
 # Inputs are the unique string to find the version and the URL.
@@ -32,19 +32,19 @@ def find_download(stringMatch, URL, actionToTake):
         print(line)
         return
     line = string.replace(line, "http://", "http://" + userName + ":" + passWord + "@")
-    if not os.path.exists(downloads + "/" + fileName):
-        print("   Downloading " + downloads + "/" + fileName)
-        Stat = urllib.urlretrieve(line, downloads + "/" + fileName)
+    if not os.path.exists(dloadDir + "/" + fileName):
+        print("   Downloading " + dloadDir + "/" + fileName + " to " + dloadDir)
+        Stat = urllib.urlretrieve(line, dloadDir + "/" + fileName)
 #        print("   Status: " + str(Stat))
         # add functionality to delete old packages
-        osCommand = "rpm -K " + downloads + "/" + fileName + "> /dev/null"
+        osCommand = "rpm -K " + dloadDir + "/" + fileName + "> /dev/null"
         osReturn = os.system(osCommand)
         print("   Download complete.  RPM validation exit code (0 is good): " + str(osReturn))
         if osReturn >= 1:
             print("  Downloaded file is corrupt or incomplete.  Removing it.")
-            os.remove(downloads + "/" + fileName)
+            os.remove(dloadDir + "/" + fileName)
     else:
-        print("   Skipping requested download of " + fileName + ".  It already exists")
+        print("   Skipping requested download of " + fileName + ".  It already exists in " + dloadDir)
     return line
 
 # Pull the temporary username/password for downloading packages from the license website
