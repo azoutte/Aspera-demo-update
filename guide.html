@@ -1,0 +1,40 @@
+<h1 style="text-align: center;">license_scrape.py</h1>
+<p><em>A tool to help manage temporary/expiring licenses and ease downloads of new GA builds.</em></p>
+<h3>Requirements:</h3>
+<ul>
+<li>Must run on a system with python 2.7 installed in /usr/bin/python</li>
+<li>To transfer the new temporary liceenses out, there must be SSH keys between this the execution system and the Aspera servers.</li>
+</ul>
+<h3>Functionality</h3>
+<h4 style="padding-left: 30px;">Identify this months keys for downloading Aspera pacakges</h4>
+<ul>
+<li>Scrape this from&nbsp;<a href="https://license.aspera.us/evals">https://license.aspera.us/evals</a>&nbsp;and use it as needed to download packages or build wget commands.</li>
+</ul>
+<h4 style="padding-left: 30px;">Download licenses</h4>
+<ul>
+<li>Download the license zip file from&nbsp;<a href="https://license.aspera.us/evals">https://license.aspera.us/evals</a></li>
+<li>Unzip that in ~/asperadownloads (be default)</li>
+<li>Create predictable names for the license files. &nbsp;Meaning that 76912-P2P-unlim.eval.aspera-license would be renamed to&nbsp;P2P1 and license&nbsp;76913-P2P-unlim.eval.aspera-license would be renamed to&nbsp;P2P2. &nbsp;With this, we can know which license goes to which server and not send the same license to two different servers that might need to use Aspera between themselves.</li>
+</ul>
+<h4 style="padding-left: 30px;">Work with the packages</h4>
+<ul>
+<li>Build a standalone wget command for the defined packages. &nbsp;The SA's can use these strings to download content. &nbsp;They can also use these keys (substituting the customers keys) to download new content on customers sites.</li>
+<li>Automatically download any packages that are desired to maintain a software repository.</li>
+</ul>
+<h4 style="padding-left: 30px;">Copy licenses to identified servers</h4>
+<ul>
+<li>I started with Ansible for this task, but found that I could implement it easier with plain scp.</li>
+</ul>
+<h3>Your Customization</h3>
+<ul>
+<li>Search for the tag CUSTOM. &nbsp;All the sections where you will generally need customizations will include that tag.</li>
+<li>Of course, you are free to customize anything else!</li>
+<li>If someone knows how to take a Shares, Faspex or Console license and add that to a demo server from command line, let me know and I will add that.</li>
+</ul>
+<h3>Future work</h3>
+<ul>
+<li>Anything that the SA team agrees is needed.</li>
+<li>Someone better with Ansible might knows ways to make that really help the distribution of files</li>
+<li>Automatic upgrades are possible if those are viewed as desirable.</li>
+</ul>
+<p><img src="license_scrape.png" alt="Screenshot of execution" width="1000" height="400" /></p>
